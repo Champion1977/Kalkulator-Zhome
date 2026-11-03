@@ -1,2 +1,2 @@
 # Kalkulator-Zhome
-Miliki perlindungan unutk Rumah Anda
+Miliki perlindungan untuk Rumah Anda
