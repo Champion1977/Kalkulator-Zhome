@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#14532d">
+<title>Kalkulator ZHome Kaktie</title>
+<style>
+:root{font-family:Arial,Helvetica,sans-serif;color:#17211b;background:#f4f7f4}
+*{box-sizing:border-box}body{margin:0;padding:18px}
+.wrap{max-width:520px;margin:0 auto}
+header{background:#14532d;color:white;padding:20px;border-radius:18px;margin-bottom:16px}
+h1{font-size:23px;margin:0 0 6px}header p{margin:0;color:#d8eadc;font-size:13px}
+.card{background:white;border:1px solid #dce6de;border-radius:16px;padding:18px;margin-bottom:14px;box-shadow:0 2px 8px #183b2410}
+label{display:block;font-size:14px;font-weight:700;margin:12px 0 6px}
+input{width:100%;padding:13px;border:1px solid #cbd8ce;border-radius:10px;font-size:17px}
+.check{display:flex;align-items:center;gap:9px;font-weight:400}.check input{width:18px;height:18px}
+table{width:100%;border-collapse:collapse;font-size:14px}td{padding:9px 0;border-bottom:1px solid #edf1ed}td:last-child{text-align:right;font-weight:600}
+.total{font-size:30px;font-weight:800;color:#166534;margin:5px 0 2px}
+.commission{display:flex;justify-content:space-between;padding-top:12px;margin-top:12px;border-top:1px solid #dce6de;font-size:15px}
+.small{font-size:12px;color:#65736a;line-height:1.45}
+button{width:100%;padding:12px;border:0;border-radius:10px;background:#e7efe8;color:#14532d;font-size:15px;font-weight:700;margin-top:12px}
+.pill{display:inline-block;background:#e2f1e5;color:#14532d;padding:5px 9px;border-radius:20px;font-size:11px;font-weight:700}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header><h1>Kalkulator ZHome Kaktie</h1><p>Anggaran kategori binaan 1A · Zurich General Takaful</p></header>
+<div class="card">
+<span class="pill">MASUKKAN NILAI PERLINDUNGAN</span>
+<label for="building">Nilai rumah / Buildings (RM)</label>
+<input id="building" type="number" min="0" step="1000" value="200000">
+<label for="contents">Nilai isi rumah / Contents (RM)</label>
+<input id="contents" type="number" min="0" step="1000" value="20000">
+<label class="check"><input id="discount" type="checkbox" checked> Diskaun multi-product 5% untuk Contents (jika layak)</label>
+</div>
+<div class="card">
+<span class="pill">ANGGARAN BAYARAN CUSTOMER</span>
+<table>
+<tr><td>Buildings (0.063%)</td><td id="b">RM126.00</td></tr>
+<tr><td>Contents (0.338%)</td><td id="c">RM67.60</td></tr>
+<tr><td>Diskaun Contents 5%</td><td id="d">−RM3.38</td></tr>
+<tr><td>Contribution selepas diskaun</td><td id="net">RM190.22</td></tr>
+<tr><td>SST 8%</td><td id="sst">RM15.22</td></tr>
+<tr><td>Stamp duty</td><td id="stamp">RM10.00</td></tr>
+</table>
+<div class="small" style="margin-top:12px">JUMLAH ANGGARAN CUSTOMER BAYAR</div>
+<div class="total" id="total">RM215.44</div>
+<div class="commission"><span>Anggaran komisen 15%</span><strong id="commission">RM28.53</strong></div>
+<button onclick="resetCalc()">Reset nilai</button>
+</div>
+<div class="small">Asas kadar: Buildings 0.063% dan Contents 0.338%, berdasarkan quotation kategori 1A yang dikongsi. SST 8%, duti setem RM10. Diskaun 5% hanya jika layak. Komisen dianggarkan 15% atas contribution selepas diskaun. Ini kalkulator anggaran, bukan quotation rasmi; semak underwriting, kelayakan diskaun dan jumlah akhir dalam sistem Zurich sebelum beri harga kepada pelanggan. Kategori binaan lain menggunakan kadar berbeza.</div>
+</div>
+<script>
+const money=n=>'RM'+n.toFixed(2);
+function calculate(){
+ const building=Math.max(0,Number(document.getElementById('building').value)||0);
+ const contents=Math.max(0,Number(document.getElementById('contents').value)||0);
+ const discountOn=document.getElementById('discount').checked;
+ const b=building*0.00063, c=contents*0.00338, d=discountOn?c*0.05:0;
+ const net=b+c-d, sst=net*0.08, total=net+sst+10, commission=net*0.15;
+ document.getElementById('b').textContent=money(b);
+ document.getElementById('c').textContent=money(c);
+ document.getElementById('d').textContent='−'+money(d);
+ document.getElementById('net').textContent=money(net);
+ document.getElementById('sst').textContent=money(sst);
+ document.getElementById('total').textContent=money(total);
+ document.getElementById('commission').textContent=money(commission);
+}
+function resetCalc(){document.getElementById('building').value=200000;document.getElementById('contents').value=20000;document.getElementById('discount').checked=true;calculate()}
+document.querySelectorAll('input').forEach(el=>el.addEventListener('input',calculate));
+calculate();
+</script>
+</body></html>
